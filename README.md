@@ -1,38 +1,38 @@
-
-package com.qspider.frameworkpractice;
-
+package testNGRuchita;
 import java.io.IOException;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.openqa.selenium.By;
+import org.testng.annotations.Test;
 
-import com.qspider.GenericLibrary.CommomUtill;
-import com.qspider.GenericLibrary.Driver;
-import com.qspider.GenericLibrary.ExcelLib;
+import frameworkpractice.Mettl;
 
-public class LoginActiTime {
-
+public class MettlTest {
+ Mettl mt = new Mettl();
+  @Test
+  public void TC_01() throws InvalidFormatException, IOException 
+  {
 	
-	public static void main(String[] args) throws InvalidFormatException, IOException 
-	{
-	  Driver.driver.get("http://127.0.0.1/login.do");
-	   String title= Driver.driver.getTitle();
-	   ExcelLib elib = new ExcelLib();
-	   CommomUtill cutil= new CommomUtill();
-	   cutil.verifyTextPresent("Username:" );
-	   elib.setExcelData("Sheet1", 1, 4, title);  
-	   String uname =elib.getExcelData("Sheet1", 1, 2);
-	   String pwd =elib.getExcelData("Sheet1", 1, 3);
-	   
-	   Driver.driver.findElement(By.xpath("//input[@type='text']")).sendKeys(uname);
-	   Driver.driver.findElement(By.xpath("//input[@type='password']")).sendKeys(pwd);
-	   Driver.driver.findElement(By.xpath("//input[@type='submit']")).click();
-       Boolean b=cutil.verifyTextofTheElemt("//td[text()='AABB1']", "AABB1");
-	   System.out.println(b);
-	}
+	 mt.navigatetoURL();
+	 
+  }
+  @Test
+  public void TC_02() throws InvalidFormatException, IOException
+  {
+	 
+	  mt.registermettl();
+	  
+  }
+  @Test
+  public void TC_03() throws InvalidFormatException, IOException
+  {
+	 
+	  mt.Login();
+	  
+  }
+  
 }
-
-package com.qspider.frameworkpractice;
+---------------------------------
+package frameworkpractice;
 
 import java.io.IOException;
 
@@ -40,11 +40,11 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
-import com.qspider.GenericLibrary.CommomUtill;
-import com.qspider.GenericLibrary.Driver;
-import com.qspider.GenericLibrary.ExcelLib;
+import GenericLibrary.CommomUtill;
+import GenericLibrary.Driver;
+import GenericLibrary.ExcelLib;
 
-public class Mettle 
+public class Mettl 
 {
 	
 	ExcelLib lib =new ExcelLib();
@@ -86,7 +86,8 @@ public class Mettle
 	 }
 
 }
-package com.qspider.GenericLibrary;
+------------------------------------------
+package com.GenericLibrary;
 
 import java.util.concurrent.TimeUnit;
 
@@ -161,18 +162,23 @@ public class CommomUtill
 	
 
 }
-package com.qspider.GenericLibrary;
+-------------------------------------------
+
+package GenericLibrary;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class Driver 
+public static class Driver 
 {
 	public static WebDriver driver= new FirefoxDriver();
-	
+
 
 }
-package com.qspider.GenericLibrary;
+
+-------------------------------------------------
+
+package com.GenericLibrary;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -188,7 +194,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 public class ExcelLib 
 {
-	public String excelFilePath="C:\\Users\\Sahir\\Desktop\\Book1.xlsx";
+	public String excelFilePath="C:\\Users\\Ruchita\\Desktop\\Book1.xlsx";
 	public String getExcelData(String sheetName,int rowNo,int colNo) throws InvalidFormatException, IOException
 	{
 	FileInputStream file= new FileInputStream(excelFilePath);
@@ -222,33 +228,3 @@ public class ExcelLib
 	}
 
 }
-package com.qspider.testNGabdur;
-
-import java.io.IOException;
-
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.testng.annotations.Test;
-
-import com.qspider.frameworkpractice.Mettle;
-
-public class MettlTest {
- Mettle mt = new Mettle();
-  @Test
-  public void TC_01() throws InvalidFormatException, IOException 
-  {
-	
-	 mt.navigatetoURL();
-	 
-  }
-  @Test
-  public void TC_02() throws InvalidFormatException, IOException
-  {
-	 
-	  mt.registermettl();
-	  
-  }
-  
-}
-
-
-
