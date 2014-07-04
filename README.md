@@ -1,3 +1,171 @@
+
+
+--------------------------------------------------------------------------
+Macro Running Part : Module 1 code...
+---------------------------------------------------------------------------
+Sub FileSize()
+
+Dim oFS, oFolder
+Dim objexcel, r, lnameArray, lname, nameLength
+Set oFS = CreateObject("Scripting.FileSystemObject")
+'Path = "" & ThisWorkbook.Worksheets("Instructions").Cells(1, 2) & ""
+
+Dim fldr As FileDialog
+Dim sItem As String
+Dim path As String
+
+Set fldr = Application.FileDialog(msoFileDialogFolderPicker)
+
+With fldr
+    .Title = "Select a Folder"
+    .AllowMultiSelect = False
+    '.InitialFileName = strPath
+    If .Show <> -1 Then GoTo NextCode
+    sItem = .SelectedItems(1)
+End With
+
+
+
+NextCode:
+path = sItem
+Set fldr = Nothing
+
+On Error GoTo Finally
+
+Set oFolder = oFS.GetFolder(path)
+
+Application.Visible = True
+
+
+r = 2
+
+Call ShowFolderDetails(oFolder)
+
+
+MsgBox "Done"
+
+Finally:
+
+
+End Sub
+
+ 
+
+'Public Function ShowFolderDetails(oF, r, ExtTypes, Flag)
+Public Function ShowFolderDetails(oF)
+Dim F
+Dim filename
+Dim SheetFlag As Boolean
+'ThisWorkbook.Worksheets("FileSize").Cells(r, 1).Value = oF.Name
+
+If oF.Files.Count <> 0 Then
+             
+        
+        Set filename = oF.Files
+            For Each folderIdx In filename
+            
+                If LCase(GetType(folderIdx.Name)) = "xlsx" Or _
+                    LCase(GetType(folderIdx.Name)) = "xlsm" Or _
+                    LCase(GetType(folderIdx.Name)) = "xls" Or _
+                    LCase(GetType(folderIdx.Name)) = "xlsb" Then
+                    
+                    SheetFlag = False
+                    Workbooks.Open folderIdx.path
+                    Workbooks(folderIdx.Name).Activate
+                    
+                    For i = 1 To Workbooks(folderIdx.Name).Worksheets.Count
+                    
+                        If Workbooks(folderIdx.Name).Worksheets(i).Name = "Confidential" Then
+                        
+                            SheetFlag = True
+                            Exit For
+                        
+                        Else
+                        
+                            SheetFlag = False
+                        
+                        End If
+                                    
+                    Next
+                    
+                    
+                    If SheetFlag = False Then
+                        
+                         Application.DisplayAlerts = False
+                         Workbooks(folderIdx.Name).Worksheets.Add().Name = "Confidential"
+                         Workbooks(folderIdx.Name).Sheets("Confidential").Range("D10") = "Confidential"
+                         Workbooks(folderIdx.Name).Sheets("Confidential").Range("D10").Font.Size = 20
+                         Workbooks(folderIdx.Name).Sheets("Confidential").Range("D10").Font.Bold = True
+                         Workbooks(folderIdx.Name).Sheets("Confidential").Activate
+                         Workbooks(folderIdx.Name).Save
+                         Workbooks(folderIdx.Name).Close
+                         Application.DisplayAlerts = True
+                    
+                    Else
+                        Application.DisplayAlerts = False
+                        LRandomNumber = Int((300 - 200 + 1) * Rnd + 200)
+                        Workbooks(folderIdx.Name).Worksheets.Add().Name = "Confidential_" & LRandomNumber
+                        Workbooks(folderIdx.Name).Sheets("Confidential_" & LRandomNumber).Range("D10") = "Confidential"
+                        Workbooks(folderIdx.Name).Sheets("Confidential_" & LRandomNumber).Range("D10").Font.Size = 20
+                        Workbooks(folderIdx.Name).Sheets("Confidential_" & LRandomNumber).Range("D10").Font.Bold = True
+                        Workbooks(folderIdx.Name).Sheets("Confidential_" & LRandomNumber).Activate
+                        Workbooks(folderIdx.Name).Save
+                        Workbooks(folderIdx.Name).Close
+                        Application.DisplayAlerts = True
+                        
+                    
+                    End If
+                
+                End If
+            Next
+            
+ 
+   
+End If
+
+
+For Each F In oF.Subfolders
+' Call ShowFolderDetails(F, r, ExtTypes, Flag)
+    Call ShowFolderDetails(F)
+Next
+End Function
+
+Public Function GetType(FileNm)
+
+    FileType = Split(FileNm, ".", -1, 1)
+    GetType = FileType(UBound(FileType))
+
+End Function
+
+
+Public Function RowsCount(ShName, ColIndex)
+
+    r = 0
+    
+    For i = 1 To Rows.Count
+    
+        If Worksheets(ShName).Cells(i, ColIndex) <> "" Then
+        
+            r = r + 1
+            
+            
+        Else
+        
+            Exit For
+        
+        End If
+        
+    Next
+    
+    RowsCount = r
+        
+End Function
+
+
+
+
+
+----------------------------------------------------------------------------------
 package testNGRuchita;
 import java.io.IOException;
 
